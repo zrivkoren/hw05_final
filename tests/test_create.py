@@ -94,7 +94,7 @@ class TestCreateView:
             f'Проверьте, что перенаправляете на страницу профиля автора `/profile/{user.username}`'
         )
 
-        # response = user_client.post(url)
-        # assert response.status_code == 200, (
-        #     'Проверьте, что на странице `/create/` выводите ошибки при неправильной заполненной формы `form`'
-        # )
+        response = user_client.post(url)
+        assert response.status_code == 200, (
+            'Проверьте, что на странице `/create/` выводите ошибки при неправильной заполненной формы `form`'
+        )
