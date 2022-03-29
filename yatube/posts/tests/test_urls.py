@@ -35,6 +35,7 @@ class PostURLTests(TestCase):
         response = self.guest_client.get('/unexciting_page/')
         self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
 
+
     def test_urls_correct_template(self):
         for template, url in self.templates_url_names.items():
             with self.subTest(url=url):
