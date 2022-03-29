@@ -7,7 +7,7 @@ from django import forms
 from django.conf import settings
 from django.core.cache import cache
 
-from posts.models import Post, Group, User
+from posts.models import Post, Group, User, Follow
 
 TEMP_MEDIA_ROOT = tempfile.mkdtemp(dir=settings.BASE_DIR)
 
@@ -153,7 +153,33 @@ class PostsTests(TestCase):
         self.assertNotEqual(content_after_del_post, content_after_clear_cash)
 
     def test_follow_mechanics(self):
-        pass
+        follow_count = Follow.objects.count()
+        self.follow = Follow.objects.create(
+            user=self.user,
+            author=self.follow_user,
+        )
+        self.post = Post.objects.create(
+            author=self.follow_user,
+            text='Супер текст в самый раз для подписки',
+        )
+        response = self.authorized_client.post(
+            reverse('posts:profile_follow', args=[self.follow_user])
+        )
+        self.assertRedirects(
+            response, reverse('posts:profile', args=[self.follow_user])
+        )
+        self.assertEqual(Follow.objects.count(), follow_count + 1)
+        self.assertTrue(Follow.objects.filter(
+            user=self.user, author=self.follow_user
+        ).exists())
+
+        unfollow_response = self.authorized_client.post(
+            reverse('posts:profile_unfollow', args=[self.follow_user], )
+        )
+        self.assertRedirects(unfollow_response, reverse(
+            'posts:profile', args=[self.follow_user]
+        ))
+        self.assertEqual(Follow.objects.count(), follow_count)
 
 
 def get_index_content(self):
