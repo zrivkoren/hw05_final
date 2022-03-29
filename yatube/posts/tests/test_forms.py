@@ -101,9 +101,7 @@ class PostCreateFormTests(TestCase):
         response = self.authorized_client.get(
             reverse('posts:post_detail', kwargs={'post_id': f'{self.post.id}'})
         )
-        self.assertEqual(
-            response.context['comments'][0].text, self.comment.text
-        )
+        self.assertEqual(response.context['comments'][0], self.comment)
 
         guest_response = self.guest_client.get(
             reverse('posts:add_comment', kwargs={'post_id': f'{self.post.id}'})
