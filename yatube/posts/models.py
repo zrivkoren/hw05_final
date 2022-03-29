@@ -1,5 +1,3 @@
-import datetime
-
 from django.db import models
 from django.contrib.auth import get_user_model
 
@@ -80,6 +78,8 @@ class Comment(models.Model):
         'Дата публикации комментария',
         auto_now_add=True,
     )
+
+
 class Follow(models.Model):
     user = models.ForeignKey(
         User,
