@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
 {% load thumbnail %}
-{% block title %}Последние обновления на сайте{% endblock %}
-{% block header %}Последние обновления на сайте{% endblock %}
+{% block title %}Страница подписок на авторов{% endblock %}
+{% block header %}Страница подписок на авторов{% endblock %}
 {% block content %}
   {% include 'posts/includes/switcher.html' %}
     <div class="container py-5">
-        <h1>Последние обновления на сайте</h1>
-{#<!-- {% load cache %}#}
-{#{% cache 20 index_page %} -->#}
+        <h1>Страница подписок на авторов</h1>
+
+
         {% for post in page_obj %}
             <article>
                 <ul>
@@ -29,7 +29,7 @@
             {% if not forloop.last %}
                 <hr>{% endif %}
         {% endfor %}
-{#<!--  {% endcache %} -->#}
+
     {% include 'posts/includes/paginator.html' %}
     </div>
 {% endblock %}

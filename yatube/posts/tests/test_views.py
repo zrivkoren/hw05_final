@@ -18,6 +18,7 @@ class PostsTests(TestCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.user = User.objects.create_user(username='TestUser')
+        cls.follow_user = User.objects.create_user(username='FollowMe')
         cls.group = Group.objects.create(
             title='Тестовая группа',
             slug='test_slug',
@@ -150,6 +151,9 @@ class PostsTests(TestCase):
         cache.clear()
         content_after_clear_cash = get_index_content(self)
         self.assertNotEqual(content_after_del_post, content_after_clear_cash)
+
+    def test_follow_mechanics(self):
+        pass
 
 
 def get_index_content(self):
