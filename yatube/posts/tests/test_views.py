@@ -32,7 +32,7 @@ class PostsTests(TestCase):
             b'\x02\x00\x01\x00\x00\x02\x02\x0C'
             b'\x0A\x00\x3B'
         )
-        uploaded = SimpleUploadedFile(
+        cls.uploaded = SimpleUploadedFile(
             name='test_small.gif',
             content=small_gif,
             content_type='image/gif'
@@ -42,12 +42,12 @@ class PostsTests(TestCase):
                 author=cls.user,
                 text='Здесь какой то рандомный текст',
                 group=cls.group,
-                image=uploaded,
+                image=cls.uploaded,
             )
         cls.templates_pages_names = {
             'posts/index.html': reverse('posts:index'),
             'posts/group_list.html': (
-                reverse('posts:group_list', kwargs={'slug': 'test_slug'})
+                reverse('posts:group_list', kwargs={'slug': cls.group.slug})
             ),
             'posts/profile.html': (
                 reverse('posts:profile',
@@ -97,10 +97,9 @@ class PostsTests(TestCase):
         response = self.authorized_client.get(
             reverse('posts:post_detail', kwargs={'post_id': f'{self.post.id}'})
         )
-        self.assertEqual(response.context['post'].text,
-                         'Здесь какой то рандомный текст')
+        self.assertEqual(response.context['post'].text, self.post.text)
         self.assertTrue(
-            Post.objects.filter(image='posts/test_small.gif').exists()
+            Post.objects.filter(image=f'posts/{self.uploaded.name}').exists()
         )
 
     def test_edit_post_show_correct_context(self):
@@ -126,7 +125,9 @@ class PostsTests(TestCase):
                 self.assertEqual(response.context['page_obj'].end_index(), 10)
                 self.assertIn(self.post, Post.objects.all())
                 self.assertTrue(
-                    Post.objects.filter(image='posts/test_small.gif').exists()
+                    Post.objects.filter(
+                        image=f'posts/{self.uploaded.name}'
+                    ).exists()
                 )
 
     def test_second_page_contains_three_records(self):
@@ -135,7 +136,9 @@ class PostsTests(TestCase):
                 response = self.client.get(url + '?page=2')
                 self.assertEqual(response.context['page_obj'].end_index(), 13)
                 self.assertTrue(
-                    Post.objects.filter(image='posts/test_small.gif').exists()
+                    Post.objects.filter(
+                        image=f'posts/{self.uploaded.name}'
+                    ).exists()
                 )
 
     def test_cash_function(self):

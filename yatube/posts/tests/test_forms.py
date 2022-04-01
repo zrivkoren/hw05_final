@@ -37,14 +37,14 @@ class PostCreateFormTests(TestCase):
             b'\x02\x00\x01\x00\x00\x02\x02\x0C'
             b'\x0A\x00\x3B'
         )
-        uploaded = SimpleUploadedFile(
+        cls.uploaded = SimpleUploadedFile(
             name='small.gif',
             content=small_gif,
             content_type='image/gif'
         )
         cls.form_date_create_post = {
             'text': 'Тестируем создания нового поста форму',
-            'image': uploaded,
+            'image': cls.uploaded,
         }
         cls.comment = Comment.objects.create(
             author=cls.user,
@@ -77,7 +77,9 @@ class PostCreateFormTests(TestCase):
         self.assertEqual(
             Post.objects.get(id=2).text, self.form_date_create_post['text']
         )
-        self.assertTrue(Post.objects.filter(image='posts/small.gif').exists())
+        self.assertTrue(Post.objects.filter(
+            image=f'posts/{self.uploaded.name}'
+        ).exists())
 
     def test_edit_post(self):
         post_count = Post.objects.count()
