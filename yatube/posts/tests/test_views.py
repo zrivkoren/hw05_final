@@ -37,13 +37,18 @@ class PostsTests(TestCase):
             content=small_gif,
             content_type='image/gif'
         )
+        bulk_posts = []
         for i in range(13):
-            cls.post = Post.objects.create(
-                author=cls.user,
-                text='Здесь какой то рандомный текст',
-                group=cls.group,
-                image=cls.uploaded,
+            bulk_posts.append(
+                Post(
+                    author=cls.user,
+                    text='Здесь какой то рандомный текст',
+                    group=cls.group,
+                    image=cls.uploaded,
+                )
             )
+        Post.objects.bulk_create(bulk_posts)
+        cls.post = Post.objects.all()[12]
         cls.templates_pages_names = {
             'posts/index.html': reverse('posts:index'),
             'posts/group_list.html': (
