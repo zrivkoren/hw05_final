@@ -50,6 +50,7 @@ def profile(request, username):
         'author_name': username,
         'count_user_post': post_list.count(),
         'following': following,
+        'user': request.user,
     }
     return render(request, template, context)
 
