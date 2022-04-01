@@ -151,12 +151,3 @@ yatube/posts/static/
 yatube/media/
 
 /tmp*/
-
-/yatube/about/migrations/
-/yatube/core/migrations/
-/yatube/users/migrations/
-/yatube/about/models.py
-/yatube/about/admin.py
-/yatube/users/models.py
-/yatube/users/admin.py
-
